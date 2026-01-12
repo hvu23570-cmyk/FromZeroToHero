@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TaskItem from "../components/TaskItem";
+import { request } from "../services/apiClient";
+
 function TasksPage() {
   const [tasks, setTasks] = useState([]);
   //tasks: danh sách task hiện tại
@@ -10,6 +12,13 @@ function TasksPage() {
   //newTasks: nội dung đang nhập trong ô input
   //setNewTasks: hàm để cập nhật nội dung khi gõ
   //useState(""): ban đầu nội dung rỗng
+
+  useEffect(() => {
+    //gọi thử GET/ tasks khi page load
+    request("/tasks")
+      .then(data => console.log("GET /tasks:", data))
+      .catch(err => console.error(err))
+  }, []);
 
   const handleAddTask = () => {
     //Khi người dùng bấm nút "Add Task"
