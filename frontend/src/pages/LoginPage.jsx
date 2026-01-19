@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { login } from "../services/auth";
+
 
 export default function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
     const navigate = useNavigate();
     const [BackendStatus, setBackendStatus] = useState("Connecting...");
 
@@ -18,21 +21,31 @@ export default function LoginPage() {
     }, []);
 
 
-    const handleSubmit = (e) => {
+     
+    // LOGIN THẬT
+    const handleSubmit = async(e) => {
         e.preventDefault();
+        setError("");
 
+    // VALIDATE FE
         if(!email.includes("@") || password.length < 6){
-            alert("Email hoặc mật khẩu không hợp lệ!");
+            setError ("Email hoặc mật khẩu không hợp lệ!");
             return;
         }
-        localStorage.setItem("token", "fake-token");
-        navigate("/tasks");
+
+        try {
+            await login(email, password); //gọi backend + lưu token
+            navigate("/tasks"); //chuyển trang
+        } catch (err) {
+            setError(err.message || "Login thất bại");
+        }       
     };
 
     return (
         <div style={{ padding: "20px"}}>
             <h2>Login</h2>
             <p>Backend status: {BackendStatus === "OK" ? "OK" : BackendStatus}</p>
+            {error && <p style={{color: "red"}}>{error}</p>}
             {/* Gắn hàm xử lý sự kiện vào form */}
             <form onSubmit={handleSubmit}>
                 <div>

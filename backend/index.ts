@@ -1,3 +1,5 @@
+import cors from "cors";
+
 //Import thư viện express để tạo server và API
 import express from 'express';
 
@@ -17,6 +19,8 @@ const schema = fs.readFileSync(
 
 //Khởi tạo ứng dụng Express
 const app = express();
+
+app.use(cors());
 app.use(express.json());
 
 //kết nối tới database SQLite (file app.db)
