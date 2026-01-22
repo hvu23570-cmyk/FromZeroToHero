@@ -1,4 +1,6 @@
+import { fileURLToPath } from "url";
 import cors from "cors";
+
 
 //Import thư viện express để tạo server và API
 import express from 'express';
@@ -11,6 +13,8 @@ import path from 'path';
 
 import fs from "fs";
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 // đọc file schema.sql
 const schema = fs.readFileSync(
   path.join(__dirname, "db/schema.sql"),
@@ -34,6 +38,12 @@ db.exec(`
 INSERT OR IGNORE INTO users (id, email, passwordHash)
 VALUES (1, 'admin@example.com', 'hashed_password_123')
 `)
+
+// [GET] /health
+// dùng để test server sống hay không
+app.get("/health", (req, res) => {
+  res.json({ ok: true });
+});
 
 //TASKS API
 //[GET] /tasks :Lấy toàn bộ danh sách task từ database

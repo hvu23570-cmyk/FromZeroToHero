@@ -19,6 +19,13 @@ export const getTasks = async () => {
     const res = await fetch(`${API_URL}/tasks`,{
         headers: getAuthHeader(),
     });
+    //nếu server trả về lỗi (401 ,404, 500...)
+    if (!res.ok) {
+        const errorData = await res.json();
+        console.error("Lỗi từ server:", errorData);
+        //trả về mảng rỗng
+        return [];
+    }
     //chuyển response sang JSON rồi trả về cho FE
     return res.json();
 }

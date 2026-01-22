@@ -4,8 +4,8 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "bun --watch index.ts",
-    "start": "bun index.ts"
+  "dev": "bun --watch server.js",
+  "start": "bun server.js"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.13",

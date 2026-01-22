@@ -26,6 +26,10 @@ export const login = async (email, password) => {
     });
 
     const data = await res.json();
+    if (!res.ok) {
+    // Truy cập vào data.error.message để lấy dòng chữ tiếng Việt
+    throw new Error(data.error?.message || "Đăng nhập thất bại");
+}
 
 //Nếu login thành công -> có token
 if (data.token) {

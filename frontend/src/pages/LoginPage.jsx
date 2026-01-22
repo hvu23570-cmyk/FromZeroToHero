@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../services/auth";
 
@@ -8,20 +8,7 @@ export default function LoginPage() {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const navigate = useNavigate();
-    const [BackendStatus, setBackendStatus] = useState("Connecting...");
-
-    //gọi GET/health hiển thị "OK"
-    useEffect(() => {
-        fetch("http://localhost:3000/health")
-        .then((res) => res.json())
-        .then((data) => {
-            if (data.ok) setBackendStatus("OK");
-        })
-        .catch(() => setBackendStatus("Error"));
-    }, []);
-
-
-     
+  
     // LOGIN THẬT
     const handleSubmit = async(e) => {
         e.preventDefault();
@@ -44,7 +31,6 @@ export default function LoginPage() {
     return (
         <div style={{ padding: "20px"}}>
             <h2>Login</h2>
-            <p>Backend status: {BackendStatus === "OK" ? "OK" : BackendStatus}</p>
             {error && <p style={{color: "red"}}>{error}</p>}
             {/* Gắn hàm xử lý sự kiện vào form */}
             <form onSubmit={handleSubmit}>
