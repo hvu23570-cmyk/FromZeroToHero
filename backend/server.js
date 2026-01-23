@@ -124,11 +124,12 @@ const server = Bun.serve({
           .all(currentUser.userId);
         return json(userTasks, 200, corsHeaders);
       }
-
+      
+      //POST /TASK TITLE TRỐNG -> 400
       if (url.pathname === "/tasks" && method === "POST") {
         const body = await req.json();
         // Edge case: title rỗng
-        if ( !body.title || body.title.trim() === "" ){
+        if ( !body.title || body.title.trim() === "" ){ //trim  loại bỏ kí tự khoảng trắng (dấu cách - tab-xuống dòng)
           return jsonError("Tiêu đề không được để rỗng", "VALIDATION_ERROR", 400, corsHeaders);   
         }
         const result = db
@@ -138,7 +139,8 @@ const server = Bun.serve({
       }
 
       //SỬA TASK (PATCH)
-      if ((method === "PATCH" || method === "DELETE") && url.pathname.startsWith("/tasks/")) {
+      //PUT/ DELETE ID KHÔNG TỒN TẠI -> 404
+      if ((method === "PATCH" || method === "PUT" || method === "DELETE") && url.pathname.startsWith("/tasks/")) {
         const id = url.pathname.split("/").pop();
 
         // Bước quan trọng nhất: Kiểm tra quyền sở hữu trước khi cho phép can thiệp
@@ -146,7 +148,7 @@ const server = Bun.serve({
         if (!task) return jsonError("Không tìm thấy công việc hoặc bạn không có quyền", "NOT_FOUND", 404, corsHeaders);
 
         // Nhánh xử lý Cập nhật
-        if (method === "PATCH") {
+        if (method === "PATCH" || method === "PUT") {
           const body = await req.json();
           if (!body.title || body.title.trim() === "") {
             return jsonError("Tiêu đề không được để trống", "VALIDATION_ERROR", 400, corsHeaders);
